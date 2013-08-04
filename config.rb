@@ -37,6 +37,7 @@
 
 # Reload the browser automatically whenever files change
 activate :livereload
+config[:file_watcher_ignore] += [/\.swp$/, /\.un~$/, /\.git\//]
 
 # Methods defined in the helpers block are available in templates
 # helpers do
