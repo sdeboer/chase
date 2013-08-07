@@ -49,6 +49,7 @@ config[:file_watcher_ignore] += [/\.swp$/, /\.un~$/, /\.git\//]
 set :css_dir, 'stylesheets'
 
 set :js_dir, 'javascripts'
+config[:debug_assets] = true
 
 set :images_dir, 'images'
 

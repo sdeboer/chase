@@ -6,3 +6,8 @@ title: Welcome to Middleman
   %h1 Simon is Watchin
   %p.doc
     = link_to "Read No", "http://middlemanapp.com/"
+
+  %a(href='/register') Register
+  %a(href='/profile/12') Profile
+
+.partial(ng-view)
