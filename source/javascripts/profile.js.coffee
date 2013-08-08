@@ -1,30 +1,13 @@
-class ProfileController
-  constructor: ($resource)->
-    @profile_id = '122'
-    @Activity = $resource('/profile/:profile_id',
-      {alt: 'json', callback: 'JSON_CALLBACK'},
-      {
+profileActions = {
         get: {
           method: 'JSONP'
-          params: {visibility: '@self'}
-        }
-        replies: {
-          method: 'JSONP'
-          params: {visibility: '@self', comments: '@comments'}
         }
       }
-    )
 
-  fetch: ->
-    @activities = @Activity.get(profile_id: @profile_id)
+Profile = ($resource)->
+  $resource 'http://localhost\\:10100/profile/:profile_id',
+    {jsonp: 'JSON_CALLBACK'},
+    profileActions
 
-  expandReplies: ->
-    
-    Profile = $resource '/profile/:profile_id',
-      tsProfile = angular.module 'tsProfile', ['ngResource']
-
-      tsProfile.factory 'Profile', ($resource)->
-        $resource('profile/;profile_id', {}, {
-          query: {method: 'GET', params: {profile_id: 'profiles'}}
-        })
-
+ChaseServices = angular.module 'chaseServices', ['ngResource']
+ChaseServices.factory 'Profile', ['$resource', Profile]
