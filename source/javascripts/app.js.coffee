@@ -7,9 +7,13 @@ routes = (router, location)->
     templateUrl: 'template-register',
     controller: 'RegisterController')
 
-  router.otherwise redirectTo: '/register'
+  router.when('/welcome',
+    templateUrl: '/templates/welcome',
+    controller: 'RegisterController')
 
-  location.html5Mode true
+  router.otherwise redirectTo: '/welcome'
+
+  location.html5Mode false
 
 ChaseApp = angular.module 'ChaseApp',
   ['chaseServices'],
