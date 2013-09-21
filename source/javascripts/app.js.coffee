@@ -1,14 +1,14 @@
 routes = (router, location)->
   router.when('/profile/:profileId',
-    templateUrl: 'template-profile',
+    templateUrl: '/templates/profile.html',
     controller: 'ProfileController')
 
   router.when('/register',
-    templateUrl: 'template-register',
+    templateUrl: '/templates/register.html',
     controller: 'RegisterController')
 
   router.when('/welcome',
-    templateUrl: '/templates/welcome',
+    templateUrl: '/templates/welcome.html',
     controller: 'RegisterController')
 
   router.otherwise redirectTo: '/welcome'
