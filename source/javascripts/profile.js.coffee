@@ -1,26 +1,26 @@
-ChaseApp = angular.module 'ChaseApp'
+ChaseServices = angular.module 'chaseServices', ['ngResource']
 
 host = 'http://localhost\\:10100'
 
-profileActions = {
-        get: { method: 'JSONP' }
-      }
+profileActions =
+	get: { method: 'JSONP' }
 
 Profile = ($resource)->
-  $resource host + '/profile/:profile_id',
-    {jsonp: 'JSON_CALLBACK'},
-    profileActions
+	$resource host + '/profile/:profile_id',
+		{jsonp: 'JSON_CALLBACK'},
+		profileActions
 
-ChaseServices = angular.module 'chaseServices', ['ngResource']
 ChaseServices.factory 'csProfile', ['$resource', Profile]
 
-ProfileController = ($scope, Profile)->
-  $scope.fields = [
-    {name: 'One', value: '1 Val'},
-    {name: 'Two', value: '2 Val'}
-  ]
-  $scope.filled = 'yep'
+ProfileController = ($scope, profile)->
+	$scope.fields = [
+		{name: 'One', value: '1 Val'},
+		{name: 'Two', value: '2 Val'}
+	]
+	$scope.filled = 'yep'
 
-  $scope.profile = Profile.get(profile_id: 10)
+	$scope.profile = profile.get()
 
-ChaseApp.controller 'ProfileController', ['$scope', 'csProfile', ProfileController]
+deps = ['$scope', 'csProfile', ProfileController]
+
+angular.module('ChaseApp').controller('ProfileController', deps)
