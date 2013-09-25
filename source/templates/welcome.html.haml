@@ -1,5 +1,13 @@
 .content(ng-controller="ProfileController")
   Welcome.
   .profile
-    %h2 Known as {{ profile.handle }}
-    %h3 ID {{ profile.id }}
+    %h2 Game Profile
+
+    %form
+      .control.handle
+        %span.label Handle
+        %span.data
+          %input(ng-model="profile.handle" ng-minlength="4" ng-required=true ng-trim="true")
+      .control.location
+        %span.label Location
+        %span.data

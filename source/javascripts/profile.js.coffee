@@ -3,23 +3,20 @@ ChaseServices = angular.module 'chaseServices', ['ngResource']
 host = 'http://localhost\\:10100'
 
 profileActions =
-	get: { method: 'JSONP' }
+	get: { method: 'JSONP', params: {jsonp: 'JSON_CALLBACK'} }
+	save: { method: 'PATCH', withCredentials: true}
 
 Profile = ($resource)->
 	$resource host + '/profile/:profile_id',
-		{jsonp: 'JSON_CALLBACK'},
+		null,
 		profileActions
 
 ChaseServices.factory 'csProfile', ['$resource', Profile]
 
 ProfileController = ($scope, profile)->
-	$scope.fields = [
-		{name: 'One', value: '1 Val'},
-		{name: 'Two', value: '2 Val'}
-	]
-	$scope.filled = 'yep'
-
 	$scope.profile = profile.get()
+	$scope.$watch 'profile.handle', (newValue, oldValue)->
+		profile.save($scope.profile) unless newValue is oldValue
 
 deps = ['$scope', 'csProfile', ProfileController]
 

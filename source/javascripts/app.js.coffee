@@ -1,4 +1,10 @@
-routes = (router, location)->
+app = (router, location, http)->
+	http.defaults.useXDomain = true
+	http.defaults.withCredentials = true
+	delete http.defaults.headers.common['X-Requested-With']
+
+	console.log 'def', http.defaults
+
 	router.when('/profile/:profileId',
 		templateUrl: '/templates/profile.html')
 
@@ -11,4 +17,4 @@ routes = (router, location)->
 
 angular.module 'ChaseApp',
 	['chaseServices'],
-	['$routeProvider', '$locationProvider', routes]
+	['$routeProvider', '$locationProvider', '$httpProvider', app]
