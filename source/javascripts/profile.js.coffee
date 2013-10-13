@@ -16,7 +16,8 @@ ChaseServices.factory 'csProfile', ['$resource', Profile]
 ProfileController = ($scope, profile)->
 	$scope.profile = profile.get()
 	$scope.$watch 'profile.handle', (newValue, oldValue)->
-		profile.save($scope.profile) unless newValue is oldValue
+		if newValue isnt oldValue and oldValue?
+			profile.save $scope.profile
 
 deps = ['$scope', 'csProfile', ProfileController]
 
