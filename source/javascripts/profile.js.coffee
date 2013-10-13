@@ -1,4 +1,5 @@
 ChaseServices = angular.module 'chaseServices', ['ngResource']
+ChaseApp = angular.module('ChaseApp')
 
 host = 'http://localhost\\:10100'
 
@@ -15,10 +16,14 @@ ChaseServices.factory 'csProfile', ['$resource', Profile]
 
 ProfileController = ($scope, profile)->
 	$scope.profile = profile.get()
+
 	$scope.$watch 'profile.handle', (newValue, oldValue)->
-		if newValue isnt oldValue and oldValue?
-			profile.save $scope.profile
+		if oldValue? and newValue isnt oldValue
+
+			profile.save $scope.profile, (newProfile, httpResponse)->
+				if newProfile.$resolved
+					$scope.profileForm.$setPristine()
 
 deps = ['$scope', 'csProfile', ProfileController]
 
-angular.module('ChaseApp').controller('ProfileController', deps)
+ChaseApp.controller 'ProfileController', deps
