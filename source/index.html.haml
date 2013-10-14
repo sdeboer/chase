@@ -5,7 +5,21 @@ title: Chase
 .welcome
   %h1 Can you catch them?
 
-  %a(href='#register') Register
-  %a(href='#profile/12') Profile
-
 .partial(ng-view)
+
+.geo(ng-controller="GeoController")
+  %div(ng-hide="supportsGeo")
+    Sorry.  You cannot play.  You have no geolocation capability.
+  %div(ng-show="supportsGeo")
+    .current
+      %span.lat(ng-bind="current.latitude") --
+      %span.long(ng-bind="current.longitude") --
+      %span.heading(ng-bind="current.heading") --
+      %span.speed(ng-bind="current.speed") --
+      \(
+      %span.acc(ng-bind="current.accuracy") --
+      \)
+
+    .origin
+      %span.lat(ng-bind="origin.lat") --
+      %span.long(ng-bind="origin.long") --
