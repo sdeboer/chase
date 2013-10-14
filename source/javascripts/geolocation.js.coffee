@@ -1,37 +1,43 @@
-ChaseApp = angular.module('ChaseApp')
+ChaseApp = angular.module 'ChaseApp'
 
-host = 'http://localhost\\:10100'
+watchID = null
+
+ws = null
 
 watchPosition = ($scope, position)->
 	console.log "Watching", position
+	ws.sendRequest
+		command: 'geo'
+		coords: position.coords
 
-GeoController = ($scope, $window)->
-	geo = $window.navigator?.geolocation
+	$scope.$apply ->
+		$scope.current = position.coords
 
-	$scope.supportsGeo = geo?
+GeoController = ($scope, $window, socket)->
+	console.log 'sock', socket
+	ws = socket
+	$scope.debug = true
 
 	updateFn = (p)->
+		watchPosition $scope, p
+
+	errorFn = (e)->
+		geo.clearWatch(watchID) if watchID
+
 		$scope.$apply ->
-			watchPosition $scope, p
+			$scope.supportsGeo = false
 
 	setupFn = (p)->
-		geo.watchPosition updateFn, errorFn,
+		watchID = geo.watchPosition updateFn, errorFn,
 			enableHighAccuracy: true
 			maximumAge: 30000
 			timeout: 60000
 
-		$scope.$apply ->
-			$scope.current = p.coords
+		updateFn p
 
-	errorFn = (e)->
-		$scope.$apply ->
-			console.log "Geo Error", e
-			alert "This site only works with GeoLocation enabled."
-			$scope.supportsGeo = false
-
-	if geo?
-		console.log "G", geo
+	if geo = $window.navigator?.geolocation
+		$scope.supportsGeo = true
 		geo.getCurrentPosition setupFn, errorFn
 
 
-ChaseApp.controller 'GeoController', ['$scope', '$window', GeoController]
+ChaseApp.controller 'GeoController', ['$scope', '$window', 'WebsocketService', GeoController]
