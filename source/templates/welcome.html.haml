@@ -7,7 +7,9 @@
       .control.handle
         %span.label Handle
         %span.data
-          %input(ng-model="profile.handle" ng-minlength="4" ng-required=true ng-trim="true")
+          %input(ng-model="profile.handle" ng-minlength="4" ng-maxlength="14" ng-required=true ng-trim="true")
       .control.location
         %span.label Location
         %span.data
+      .next
+        .button Next...
