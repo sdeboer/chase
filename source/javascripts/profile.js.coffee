@@ -14,8 +14,11 @@ Profile = ($resource)->
 
 ChaseServices.factory 'csProfile', ['$resource', Profile]
 
-ProfileController = ($scope, profile)->
+ProfileController = ($scope, $location, profile)->
 	$scope.profile = profile.get()
+
+	$scope.pickGame = ->
+		$location.path '/game'
 
 	$scope.$watch 'profile.handle', (newValue, oldValue)->
 		if oldValue? and newValue isnt oldValue
@@ -24,6 +27,6 @@ ProfileController = ($scope, profile)->
 				if newProfile.$resolved
 					$scope.profileForm.$setPristine()
 
-deps = ['$scope', 'csProfile', ProfileController]
+deps = ['$scope', '$location', 'csProfile', ProfileController]
 
 ChaseApp.controller 'ProfileController', deps

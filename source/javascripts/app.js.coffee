@@ -8,10 +8,16 @@ app = (router, location, http)->
 	router.when('/profile/:profile_id',
 		templateUrl: '/templates/profile.html')
 
+	router.when('/profile',
+		templateUrl: '/templates/profile.html')
+
 	router.when('/welcome',
 		templateUrl: '/templates/welcome.html')
 
-	router.when('/games/:game_id',
+	router.when('/game/:game_id',
+		templateUrl: '/templates/game.html')
+
+	router.when('/game',
 		templateUrl: '/templates/game.html')
 
 	router.otherwise redirectTo: '/welcome'
