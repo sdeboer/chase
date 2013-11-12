@@ -1,5 +1,4 @@
 .content(ng-controller="ProfileController")
-  Welcome.
   .profile
     %h2 Game Profile
 
@@ -11,5 +10,7 @@
       .control.location
         %span.label Location
         %span.data
+
       .next
-        .button Next...
+        .button
+          %a(href="#/game") Pick a game

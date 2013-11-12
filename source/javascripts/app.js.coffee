@@ -5,11 +5,14 @@ app = (router, location, http)->
 
 	console.log 'def', http.defaults
 
-	router.when('/profile/:profileId',
+	router.when('/profile/:profile_id',
 		templateUrl: '/templates/profile.html')
 
 	router.when('/welcome',
 		templateUrl: '/templates/welcome.html')
+
+	router.when('/games/:game_id',
+		templateUrl: '/templates/game.html')
 
 	router.otherwise redirectTo: '/welcome'
 
