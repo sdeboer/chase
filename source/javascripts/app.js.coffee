@@ -1,3 +1,5 @@
+ChaseResources = angular.module 'chase.resources', ['ngResource']
+
 app = (router, location, http)->
 	http.defaults.useXDomain = true
 	http.defaults.withCredentials = true
@@ -25,5 +27,5 @@ app = (router, location, http)->
 	location.html5Mode false
 
 angular.module 'ChaseApp',
-	['chaseServices'],
+	['chase.resources'],
 	['$routeProvider', '$locationProvider', '$httpProvider', app]

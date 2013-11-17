@@ -1,5 +1,5 @@
-ChaseServices = angular.module 'chaseServices', ['ngResource']
-ChaseApp = angular.module('ChaseApp')
+Resources = angular.module 'chase.resources'
+ChaseApp = angular.module 'ChaseApp'
 
 host = 'http://localhost\\:10100'
 
@@ -12,7 +12,7 @@ Profile = ($resource)->
 		null,
 		profileActions
 
-ChaseServices.factory 'csProfile', ['$resource', Profile]
+Resources.factory 'csProfile', ['$resource', Profile]
 
 ProfileController = ($scope, $location, profile)->
 	$scope.profile = profile.get()
