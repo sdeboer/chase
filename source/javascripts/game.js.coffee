@@ -17,7 +17,8 @@ Game = ($resource)->
 Resources.factory 'csGame', ['$resource', Game]
 
 GameController = ($scope, $location, game)->
-	$scope.game = game.get()
+	$scope.games = game.list()
+	#$scope.game = game.get()
 
 	$scope.playGame = -> $location.path '/play'
 
