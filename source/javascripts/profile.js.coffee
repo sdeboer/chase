@@ -17,8 +17,7 @@ Resources.factory 'csProfile', ['$resource', Profile]
 ProfileController = ($scope, $location, profile)->
 	$scope.profile = profile.get()
 
-	$scope.pickGame = ->
-		$location.path '/game'
+	$scope.pickGame = -> $location.path '/game'
 
 	$scope.$watch 'profile.handle', (newValue, oldValue)->
 		if oldValue? and newValue isnt oldValue
