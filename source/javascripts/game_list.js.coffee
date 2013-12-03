@@ -33,7 +33,10 @@ Controller = ($scope, $location, game)->
 	$scope.playGame = -> $location.path '/play'
 
 	$scope.createGame = ->
-		console.log 'CG', $scope.currentType, $scope.gameList.game_type, @, arguments...
+		game.create {game_type: $scope.currentType}, ->
+			console.log 'CTW', arguments...
+		#game.create {game_id: $scope.currentType}, (newGame, httpResponse)->
+		#location.path '/play', game_id: 12
 
 deps = ['$scope', '$location', 'csGame', Controller]
 
