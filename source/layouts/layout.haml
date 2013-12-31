@@ -9,6 +9,34 @@
 
   %body{class: page_classes}
     = yield
-    = javascript_include_tag "//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"
-    = javascript_include_tag "//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular-resource.min.js"
+    = javascript_include_tag "//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"
+    -#:javascript
+      console.log("BLAG!");
+      var loadFirstEl;
+      function loadLibraryScript(url) {
+        var js;
+
+        loadFirstEl || (loadFirstEl = document.getElementsByTagName('head')[0]);
+
+        js = document.createElement('script');
+
+        js.type = 'text/javascript';
+        js.src = '/libs/' + url;
+
+        console.log("Should be ", js.src);
+        loadFirstEl.appendChild(js);
+      }
+
+      if(typeof angular == 'undefined') loadLibraryScript('angular.js')
+
+    = javascript_include_tag "//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-resource.min.js"
+    = javascript_include_tag "//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-route.min.js"
+
+    -#:javascript
+      try {
+        angular.module("ngResource")
+      } catch(e) {
+        loadLibraryScript('angular-resource.js')
+      }
+
     = javascript_include_tag "all"

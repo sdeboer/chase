@@ -1,3 +1,4 @@
+console.log "reading"
 Resources = angular.module 'chase.resources'
 ChaseApp = angular.module 'ChaseApp'
 
@@ -10,7 +11,7 @@ gameActions =
 	list:
 		method: 'JSONP'
 		isArray: true
-		params: 
+		params:
 			jsonp: 'JSON_CALLBACK'
 			mine: true
 
@@ -30,13 +31,12 @@ Controller = ($scope, $location, game)->
 	$scope.currentType = 0
 	#$scope.game = game.get game_id: 12
 
-	$scope.playGame = -> $location.path '/play'
+	$scope.playGame = (id)-> $location.path '/play'
 
 	$scope.createGame = ->
-		game.create {game_type: $scope.currentType}, ->
-			console.log 'CTW', arguments...
-		#game.create {game_id: $scope.currentType}, (newGame, httpResponse)->
-		#location.path '/play', game_id: 12
+		game.create {game_type: $scope.currentType}, (game)->
+			console.log 'GC', game.id, game
+			$location.path '/game/' + game.id
 
 deps = ['$scope', '$location', 'csGame', Controller]
 

@@ -1,11 +1,9 @@
-ChaseResources = angular.module 'chase.resources', ['ngResource']
+ChaseResources = angular.module 'chase.resources', ['ngResource', 'ngRoute']
 
 app = (router, location, http)->
 	http.defaults.useXDomain = true
 	http.defaults.withCredentials = true
 	delete http.defaults.headers.common['X-Requested-With']
-
-	console.log 'def', http.defaults
 
 	router.when('/profile/:profile_id',
 		templateUrl: '/templates/profile.html')

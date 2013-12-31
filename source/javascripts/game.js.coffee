@@ -13,7 +13,7 @@ watchPosition = ($scope, position)->
 	$scope.$apply ->
 		$scope.current = position.coords
 
-GeoController = ($scope, $window, socket)->
+GameController = ($scope, $window, socket)->
 	console.log 'sock', socket
 	ws = socket
 	$scope.debug = true
@@ -40,4 +40,4 @@ GeoController = ($scope, $window, socket)->
 		geo.getCurrentPosition setupFn, errorFn
 
 
-ChaseApp.controller 'GeoController', ['$scope', '$window', 'WebsocketService', GeoController]
+ChaseApp.controller 'GameController', ['$scope', '$window', 'WebsocketService', GameController]

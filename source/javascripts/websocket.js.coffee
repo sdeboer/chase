@@ -1,6 +1,6 @@
 ChaseApp = angular.module 'ChaseApp'
 
-host = 'ws://localhost:10100/ws'
+host = 'ws://localhost:10100/ws?game_id=nothing'
 
 callbacks = {}
 callbackId = 0
