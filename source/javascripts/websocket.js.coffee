@@ -1,12 +1,11 @@
-class WebSocket
+class SocketContainer
 	constructor: (@$q, @$rootScope)->
-		console.log 'ws start'
 		@host = 'ws://localhost:10100/play/'
 
 		@callbacks = {}
 		@callbackId = 0
 
-	getCallbackId: ->
+	_getCallbackId: ->
 		if @callbackId > 10000
 			@callbackId = 0
 		else
@@ -14,16 +13,20 @@ class WebSocket
 
 	setHost: (@host)->
 
-	connect: (id)->
-		@ws = new WebSocket(@host + id)
+	connect: (@id)->
+		@ws = new WebSocket(@host + @id)
 
-		@ws.onopen = -> console.log "Websocket opened"
+		@ws.onopen = @onOpen
+		@ws.onerror = @onError
+		@ws.onclose = @onClose
 
 		@ws.onmessage = @onMessage
 
+		@
+
 	sendRequest: (request)->
 		defer = @$q.defer()
-		cid = @getCallbackId()
+		cid = @_getCallbackId()
 		@callbacks[cid] =
 			time: Date.now()
 			cb: defer
@@ -32,6 +35,15 @@ class WebSocket
 		console.log "sending", request
 		@ws.send JSON.stringify(request)
 		defer.promise
+
+	onError: =>
+		console.log "WS error for " + @id, arguments...
+
+	onClose: =>
+		console.log "WS closed for " + @id
+
+	onOpen: =>
+		console.log "WS opened for " + @id
 
 	onMessage: (msg)=>
 		data = JSON.parse msg.data
@@ -44,16 +56,6 @@ class WebSocket
 
 			delete @callbacks[cid]
 
-		data
+		@
 
-class Provider
-	constructor: (@$q, @$rootScope)->
-
-	$get: ->
-		ws = new WebSocket(@$q, @$rootScope)
-		ws
-
-console.log "BE CA"
-ChaseApp = angular.module 'ChaseApp'
-ChaseApp.provider 'WebSocket', ['$q', '$rootScope', Provider]
-console.log "AF CA"
+angular.module('ChaseApp').service 'WebSocket', ['$q', '$rootScope', SocketContainer]

@@ -1,4 +1,3 @@
-console.log "reading"
 ChaseApp = angular.module 'ChaseApp'
 
 host = 'http://localhost\\:10100'
@@ -39,5 +38,4 @@ Controller = ($scope, $location, game)->
 
 deps = ['$scope', '$location', 'csGame', Controller]
 
-console.log 'blag'
 ChaseApp.controller 'GameListController', deps

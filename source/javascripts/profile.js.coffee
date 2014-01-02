@@ -7,7 +7,6 @@ profileActions =
 	save: { method: 'PATCH', withCredentials: true}
 
 Profile = ($resource)->
-	console.log 'prof rres'
 	$resource host + '/profile/:profile_id',
 		null,
 		profileActions
@@ -28,5 +27,4 @@ ProfileController = ($scope, $location, profile)->
 
 deps = ['$scope', '$location', 'csProfile', ProfileController]
 
-console.log 'profile'
 ChaseApp.controller 'ProfileController', deps
