@@ -4,6 +4,8 @@ watchID = null
 
 ws = null
 
+console.log 'setting up to play'
+
 watchPosition = ($scope, position)->
 	console.log "Watching", position
 	ws.sendRequest
@@ -13,7 +15,7 @@ watchPosition = ($scope, position)->
 	$scope.$apply ->
 		$scope.current = position.coords
 
-GameController = ($scope, $window, socket)->
+Controller = ($scope, $window, socket)->
 	console.log 'sock', socket
 	ws = socket
 	$scope.debug = true
@@ -40,4 +42,6 @@ GameController = ($scope, $window, socket)->
 		geo.getCurrentPosition setupFn, errorFn
 
 
-ChaseApp.controller 'GameController', ['$scope', '$window', 'WebsocketService', GameController]
+console.log "PC B"
+ChaseApp.controller 'PlayController', ['$scope', '$window', 'WebSocketProvider', Controller]
+console.log "PC a"

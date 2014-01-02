@@ -1,48 +1,59 @@
-ChaseApp = angular.module 'ChaseApp'
+class WebSocket
+	constructor: (@$q, @$rootScope)->
+		console.log 'ws start'
+		@host = 'ws://localhost:10100/play/'
 
-host = 'ws://localhost:10100/ws?game_id=nothing'
+		@callbacks = {}
+		@callbackId = 0
 
-callbacks = {}
-callbackId = 0
+	getCallbackId: ->
+		if @callbackId > 10000
+			@callbackId = 0
+		else
+			@callbackId += 1
 
-getCallbackId = ->
-	if callbackId > 10000
-		callbackId = 0
-	else
-		callbackId += 1
+	setHost: (@host)->
 
-SocketConstructor = ($q, $rootScope)->
-	ws = new WebSocket host
+	connect: (id)->
+		@ws = new WebSocket(@host + id)
 
-	ws.onopen = -> console.log "Websocket opened"
+		@ws.onopen = -> console.log "Websocket opened"
 
-	ws.onmessage = (msg)->
-		data = JSON.parse msg.data
-		console.log "received", data
-		cid = data.callback_id
+		@ws.onmessage = @onMessage
 
-		if cid of callbacks
-			$rootScope.$apply ->
-				callbacks[data.callback_id].cb.resolve data.data
-
-				delete callbacks[cid]
-
-	SocketService = {}
-
-	sendRequest = (request)->
-		defer = $q.defer()
-		cid = getCallbackId()
-		callbacks[cid] =
+	sendRequest: (request)->
+		defer = @$q.defer()
+		cid = @getCallbackId()
+		@callbacks[cid] =
 			time: Date.now()
 			cb: defer
 
 		request.callback_id = cid
 		console.log "sending", request
-		ws.send JSON.stringify(request)
+		@ws.send JSON.stringify(request)
 		defer.promise
 
-	SocketService.sendRequest = sendRequest
+	onMessage: (msg)=>
+		data = JSON.parse msg.data
+		console.log "received", data
+		cid = data.callback_id
 
-	SocketService
+		if cid of @callbacks
+			@$rootScope.$apply ->
+				@callbacks[cid].cb.resolve data.data
 
-ChaseApp.factory 'WebsocketService', ['$q', '$rootScope', SocketConstructor]
+			delete @callbacks[cid]
+
+		data
+
+class Provider
+	constructor: (@$q, @$rootScope)->
+
+	$get: ->
+		ws = new WebSocket(@$q, @$rootScope)
+		ws
+
+console.log "BE CA"
+ChaseApp = angular.module 'ChaseApp'
+ChaseApp.provider 'WebSocket', ['$q', '$rootScope', Provider]
+console.log "AF CA"

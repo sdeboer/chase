@@ -1,4 +1,3 @@
-Resources = angular.module 'chase.resources'
 ChaseApp = angular.module 'ChaseApp'
 
 host = 'http://localhost\\:10100'
@@ -8,11 +7,12 @@ profileActions =
 	save: { method: 'PATCH', withCredentials: true}
 
 Profile = ($resource)->
+	console.log 'prof rres'
 	$resource host + '/profile/:profile_id',
 		null,
 		profileActions
 
-Resources.factory 'csProfile', ['$resource', Profile]
+ChaseApp.factory 'csProfile', ['$resource', Profile]
 
 ProfileController = ($scope, $location, profile)->
 	$scope.profile = profile.get()
@@ -28,4 +28,5 @@ ProfileController = ($scope, $location, profile)->
 
 deps = ['$scope', '$location', 'csProfile', ProfileController]
 
+console.log 'profile'
 ChaseApp.controller 'ProfileController', deps

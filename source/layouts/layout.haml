@@ -9,7 +9,10 @@
 
   %body{class: page_classes}
     = yield
-    = javascript_include_tag "//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"
+
+    = javascript_include_tag "//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.js"
+    = javascript_include_tag "//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-route.js"
+    = javascript_include_tag "//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-resource.js"
     -#:javascript
       console.log("BLAG!");
       var loadFirstEl;
@@ -28,9 +31,6 @@
       }
 
       if(typeof angular == 'undefined') loadLibraryScript('angular.js')
-
-    = javascript_include_tag "//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-resource.min.js"
-    = javascript_include_tag "//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-route.min.js"
 
     -#:javascript
       try {

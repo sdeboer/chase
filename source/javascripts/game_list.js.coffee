@@ -1,5 +1,4 @@
 console.log "reading"
-Resources = angular.module 'chase.resources'
 ChaseApp = angular.module 'ChaseApp'
 
 host = 'http://localhost\\:10100'
@@ -23,7 +22,7 @@ Game = ($resource)->
 		null,
 		gameActions
 
-Resources.factory 'csGame', ['$resource', Game]
+ChaseApp.factory 'csGame', ['$resource', Game]
 
 Controller = ($scope, $location, game)->
 	$scope.games = game.list()
@@ -36,8 +35,9 @@ Controller = ($scope, $location, game)->
 	$scope.createGame = ->
 		game.create {game_type: $scope.currentType}, (game)->
 			console.log 'GC', game.id, game
-			$location.path '/game/' + game.id
+			$location.path '/play/' + game.id
 
 deps = ['$scope', '$location', 'csGame', Controller]
 
+console.log 'blag'
 ChaseApp.controller 'GameListController', deps

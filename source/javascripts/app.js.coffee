@@ -1,5 +1,3 @@
-ChaseResources = angular.module 'chase.resources', ['ngResource', 'ngRoute']
-
 app = (router, location, http)->
 	http.defaults.useXDomain = true
 	http.defaults.withCredentials = true
@@ -14,16 +12,16 @@ app = (router, location, http)->
 	router.when('/welcome',
 		templateUrl: '/templates/welcome.html')
 
-	router.when('/game/:game_id',
-		templateUrl: '/templates/game.html')
-
 	router.when('/game_list',
 		templateUrl: '/templates/game_list.html')
+
+	router.when('/play/:play_id',
+		templateUrl: '/templates/play.html')
 
 	router.otherwise redirectTo: '/welcome'
 
 	location.html5Mode false
 
 angular.module 'ChaseApp',
-	['chase.resources'],
+	['ngResource', 'ngRoute'],
 	['$routeProvider', '$locationProvider', '$httpProvider', app]
