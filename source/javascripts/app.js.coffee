@@ -23,5 +23,5 @@ app = (router, location, http)->
 	location.html5Mode false
 
 angular.module 'ChaseApp',
-	['ngResource', 'ngRoute'],
+	['ngResource', 'ngRoute', 'angular.js.injector'],
 	['$routeProvider', '$locationProvider', '$httpProvider', app]
