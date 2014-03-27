@@ -12,7 +12,8 @@ watchPosition = ($scope, position)->
 	$scope.$apply ->
 		$scope.current = position.coords
 
-Controller = ($scope, $window, $rp, socket)->
+Controller = ($scope, $window, $rp, jsInjector, socket)->
+	jsInjector.add "/libs/paper-full.js"
 	$scope.game_id = $rp.game_id
 	ws = socket
 	ws.connect $rp.game_id
@@ -40,4 +41,4 @@ Controller = ($scope, $window, $rp, socket)->
 		geo.getCurrentPosition setupFn, errorFn
 
 
-ChaseApp.controller 'PlayController', ['$scope', '$window', '$routeParams', 'WebSocket', Controller]
+ChaseApp.controller 'PlayController', ['$scope', '$window', '$routeParams', 'jsInjector', 'WebSocket', Controller]
