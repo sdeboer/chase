@@ -23,8 +23,9 @@ Controller = ($scope, $window, $rp, socket)->
 	path.strokeColor = 'black'
 	start = new paper.Point(100, 100)
 	path.moveTo start
-	path.lineTo start.add(100, 100)
+	path.lineTo start.add([100, 100])
 	paper.view.draw()
+	paper.view.onFrame = (e)-> path.rotate 3
 
 	updateFn = (p)->
 		watchPosition $scope, p
