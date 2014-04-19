@@ -12,12 +12,19 @@ watchPosition = ($scope, position)->
 	$scope.$apply ->
 		$scope.current = position.coords
 
-Controller = ($scope, $window, $rp, jsInjector, socket)->
-	jsInjector.add "/libs/paper-full.js"
+Controller = ($scope, $window, $rp, socket)->
 	$scope.game_id = $rp.game_id
 	ws = socket
 	ws.connect $rp.game_id
 	$scope.debug = true
+
+	paper.setup "playMap"
+	path = new paper.Path()
+	path.strokeColor = 'black'
+	start = new paper.Point(100, 100)
+	path.moveTo start
+	path.lineTo start.add(100, 100)
+	paper.view.draw()
 
 	updateFn = (p)->
 		watchPosition $scope, p
@@ -41,4 +48,4 @@ Controller = ($scope, $window, $rp, jsInjector, socket)->
 		geo.getCurrentPosition setupFn, errorFn
 
 
-ChaseApp.controller 'PlayController', ['$scope', '$window', '$routeParams', 'jsInjector', 'WebSocket', Controller]
+ChaseApp.controller 'PlayController', ['$scope', '$window', '$routeParams', 'WebSocket', Controller]

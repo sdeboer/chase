@@ -19,6 +19,7 @@ Injector = ($compile, $rootScope)->
 				return
 		else
 			scope.injectedJS = []
+			#head.append($compile("<script data-ng-repeat='js in injectedJS' data-ng-src='{{js.href}}' type='text/javascript'></script>")(scope))
 			head.append($compile("<link data-ng-repeat='js in injectedJS' data-ng-href='{{js.href}}' rel='stylesheet' />")(scope))
 
 		scope.injectedJS.push href: href

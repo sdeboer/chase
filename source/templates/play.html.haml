@@ -2,6 +2,8 @@
   .play
     %h2 {{label}}
 
+    %canvas#playMap(resize=true)
+
   .geo
     %button(ng-click="debug = !debug") Toggle Debugging
     .debug(ng-show="debug")
@@ -20,3 +22,5 @@
         .origin
           %span.lat(ng-bind="origin.lat") **
           %span.long(ng-bind="origin.long") **
+
+  %script(type="text/paperscript" src="javascripts/game_play.js" canvas="play")
