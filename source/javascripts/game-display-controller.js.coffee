@@ -46,4 +46,4 @@ class Controller
 		@position.updatePlayer data
 
 
-ChaseApp.controller 'PlayController', ['$scope', '$window', '$routeParams', 'WebSocket', 'PositionService', Controller]
+ChaseApp.controller 'GameDisplayController', ['$scope', '$window', '$routeParams', 'WebSocket', 'PositionService', Controller]
