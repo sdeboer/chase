@@ -4,8 +4,6 @@ class ProfileController
 	constructor: ($scope, $location, plist)->
 		$scope.profile = profile = plist.observer
 
-		console.log 'pp', profile
-
 		$scope.pickGame = -> $location.path '/game_list'
 
 		$scope.$watch 'profile.handle', (newValue, oldValue)->

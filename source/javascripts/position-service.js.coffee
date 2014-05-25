@@ -35,6 +35,7 @@ class PositionService
 		@profiles.add pid
 
 		if circ = @players[pid]
+			console.log 'updating', pid
 			circ.position = xy
 		else
 			console.log 'making', pid
