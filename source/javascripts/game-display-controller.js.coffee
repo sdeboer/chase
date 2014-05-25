@@ -1,49 +1,48 @@
 ChaseApp = angular.module 'ChaseApp'
 
-watchID = null
-
-ws = null
-
-watchPosition = ($scope, position)->
-	ws.sendRequest
-		command: 'geo'
-		coords: position.coords
-
-	$scope.$apply ->
-		$scope.current = position.coords
-
 class Controller
-	constructor: ($scope, $window, $route, socket, @position)->
-		$scope.game_id = $route.game_id
-		ws = socket
-		ws.connect $route.game_id
-		$scope.debug = true
+	constructor: (@$scope, $window, $route, @socket, positionService)->
 
-		updateFn = (p)->
-			watchPosition $scope, p
+		@canvas = positionService.canvas()
+		@socket.connect $route.game_id
 
-		errorFn = (e)->
-			geo.clearWatch(watchID) if watchID
+		@$scope.game_id = $route.game_id
+		@$scope.debug = true
 
-			$scope.$apply ->
-				$scope.supportsGeo = false
+		@$scope.$on 'location', @locationChange
+		@$scope.$on '$destroy', @destroy
 
-		setupFn = (p)->
-			watchID = geo.watchPosition updateFn, errorFn,
-				enableHighAccuracy: true
-				maximumAge: 30000
-				timeout: 60000
+		if @geo = $window.navigator?.geolocation
+			@$scope.supportsGeo = true
+			@geo.getCurrentPosition @setupFn, @errorFn
 
-			updateFn p
+	setupFn: (p)=>
+		@watchID = @geo.watchPosition @watchPosition, @errorFn,
+			enableHighAccuracy: true
+			maximumAge: 30000
+			timeout: 60000
 
-		$scope.$on 'location', @locationChange
+		@watchPosition p
 
-		if geo = $window.navigator?.geolocation
-			$scope.supportsGeo = true
-			geo.getCurrentPosition setupFn, errorFn
+	errorFn: (e)=>
+		@geo.clearWatch(@watchID) if @watchID
 
-	locationChange: (e, data)=>
-		@position.updatePlayer data
+		@$scope.$apply =>
+			@$scope.supportsGeo = false
 
+	watchPosition: (position)=>
+		@socket.sendRequest
+			command: 'geo'
+			coords: position.coords
+
+		@$scope.$apply =>
+			@$scope.current = position.coords
+
+	locationChange: ($e, data)=>
+		@canvas.updatePlayer data
+
+	destroy: ($e)=>
+		@geo.clearWatch(@watchID) if @watchID
+		@socket.close()
 
 ChaseApp.controller 'GameDisplayController', ['$scope', '$window', '$routeParams', 'WebSocket', 'PositionService', Controller]

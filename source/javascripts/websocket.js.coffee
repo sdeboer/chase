@@ -26,6 +26,9 @@ class SocketContainer
 
 		@
 
+	close: ->
+		@ws.close()
+
 	sendRequest: (request)->
 		defer = @$q.defer()
 		cid = @_getCallbackId()
