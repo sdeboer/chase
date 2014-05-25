@@ -1,3 +1,5 @@
+ChaseApp = angular.module 'ChaseApp'
+
 class SocketContainer
 	constructor: (@$q, @$rootScope)->
 		@host = 'ws://localhost:10100/play/'
@@ -27,6 +29,7 @@ class SocketContainer
 	sendRequest: (request)->
 		defer = @$q.defer()
 		cid = @_getCallbackId()
+		console.log "send", cid
 		@callbacks[cid] =
 			time: Date.now()
 			cb: defer
@@ -47,15 +50,16 @@ class SocketContainer
 
 	onMessage: (msg)=>
 		data = JSON.parse msg.data
-		console.log "received", data
 		cid = data.callback_id
 
-		if cid of @callbacks
+		if cid and cid of @callbacks
 			@$rootScope.$apply ->
 				@callbacks[cid].cb.resolve data.data
 
 			delete @callbacks[cid]
+		else
+			@$rootScope.$broadcast data.command, data
 
 		@
 
-angular.module('ChaseApp').service 'WebSocket', ['$q', '$rootScope', SocketContainer]
+ChaseApp.service 'WebSocket', ['$q', '$rootScope', SocketContainer]

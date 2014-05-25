@@ -12,65 +12,38 @@ watchPosition = ($scope, position)->
 	$scope.$apply ->
 		$scope.current = position.coords
 
-class Display
-	constructor: (@page)->
-		p = @page
-		p.setup "playMap"
-		pv = p.view
-		vw = pv.viewSize.width
-		h = vw * 9 / 16
-		pv.viewSize = [vw, h]
+class Controller
+	constructor: ($scope, $window, $route, socket, @position)->
+		$scope.game_id = $route.game_id
+		ws = socket
+		ws.connect $route.game_id
+		$scope.debug = true
 
-		b = pv.bounds
-		vm = Math.max b.width, b.height
-		@scale = vm / 4000
-		c = pv.center
-		@c_x = c.x
-		@c_y = c.y
+		updateFn = (p)->
+			watchPosition $scope, p
 
-		tt = @transform(new p.Point(500, 500))
-		console.log 'tt', tt
-		c3 = new p.Path.Circle tt, 15
-		c3.strokeColor = 'purple'
+		errorFn = (e)->
+			geo.clearWatch(watchID) if watchID
 
-		@origin = new p.Path.Circle pv.center, 3
-		@origin.strokeColor = 'red'
+			$scope.$apply ->
+				$scope.supportsGeo = false
 
-		p.view.draw()
-		p.view.onFrame = @onFrame
-		
-	onFrame: (e)=>
+		setupFn = (p)->
+			watchID = geo.watchPosition updateFn, errorFn,
+				enableHighAccuracy: true
+				maximumAge: 30000
+				timeout: 60000
 
-	transform: (pt)->
-		new @page.Point (pt.x * @scale) + @c_x, -(pt.y * @scale) + @c_y
+			updateFn p
 
-Controller = ($scope, $window, $rp, socket)->
-	$scope.game_id = $rp.game_id
-	ws = socket
-	ws.connect $rp.game_id
-	$scope.debug = true
+		$scope.$on 'location', @locationChange
 
-	display = new Display(paper)
+		if geo = $window.navigator?.geolocation
+			$scope.supportsGeo = true
+			geo.getCurrentPosition setupFn, errorFn
 
-	updateFn = (p)->
-		watchPosition $scope, p
+	locationChange: (e, data)=>
+		@position.updatePlayer data
 
-	errorFn = (e)->
-		geo.clearWatch(watchID) if watchID
 
-		$scope.$apply ->
-			$scope.supportsGeo = false
-
-	setupFn = (p)->
-		watchID = geo.watchPosition updateFn, errorFn,
-			enableHighAccuracy: true
-			maximumAge: 30000
-			timeout: 60000
-
-		updateFn p
-
-	if geo = $window.navigator?.geolocation
-		$scope.supportsGeo = true
-		geo.getCurrentPosition setupFn, errorFn
-
-ChaseApp.controller 'PlayController', ['$scope', '$window', '$routeParams', 'WebSocket', Controller]
+ChaseApp.controller 'PlayController', ['$scope', '$window', '$routeParams', 'WebSocket', 'PositionService', Controller]

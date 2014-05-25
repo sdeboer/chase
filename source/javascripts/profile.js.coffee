@@ -1,30 +1,16 @@
 ChaseApp = angular.module 'ChaseApp'
 
-host = 'http://localhost\\:10100'
+class ProfileController
+	constructor: ($scope, $location, plist, profile)->
+		$scope.profile = plist.observer
 
-profileActions =
-	get: { method: 'JSONP', params: {jsonp: 'JSON_CALLBACK'} }
-	save: { method: 'PATCH', withCredentials: true}
+		$scope.pickGame = -> $location.path '/game_list'
 
-Profile = ($resource)->
-	$resource host + '/profile/:profile_id',
-		null,
-		profileActions
+		$scope.$watch 'profile.handle', (newValue, oldValue)->
+			if oldValue? and newValue isnt oldValue
 
-ChaseApp.factory 'csProfile', ['$resource', Profile]
+				profile.save $scope.profile, (newProfile, httpResponse)->
+					if newProfile.$resolved
+						$scope.profileForm.$setPristine()
 
-ProfileController = ($scope, $location, profile)->
-	$scope.profile = profile.get()
-
-	$scope.pickGame = -> $location.path '/game_list'
-
-	$scope.$watch 'profile.handle', (newValue, oldValue)->
-		if oldValue? and newValue isnt oldValue
-
-			profile.save $scope.profile, (newProfile, httpResponse)->
-				if newProfile.$resolved
-					$scope.profileForm.$setPristine()
-
-deps = ['$scope', '$location', 'csProfile', ProfileController]
-
-ChaseApp.controller 'ProfileController', deps
+ChaseApp.controller 'ProfileController', ['$scope', '$location', 'ProfileList', ProfileController]
