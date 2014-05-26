@@ -2,7 +2,8 @@ ChaseApp = angular.module 'ChaseApp'
 
 class SocketContainer
 	constructor: (@$q, @$rootScope)->
-		@host = 'ws://localhost:10100/play/'
+		#@host = 'ws://localhost:10100/play/'
+		@host = 'ws://tag.psiinteractive.com/play/'
 
 		@callbacks = {}
 		@callbackId = 0

@@ -1,4 +1,5 @@
-host = 'http://localhost\\:10100'
+#host = 'http://localhost\\:10100'
+host = 'http://tag.psiinteractive.com'
 
 gameActions =
 	get: { method: 'JSONP', params: {jsonp: 'JSON_CALLBACK'} }

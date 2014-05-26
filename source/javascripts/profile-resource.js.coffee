@@ -1,6 +1,7 @@
 ChaseApp = angular.module 'ChaseApp'
 
-host = 'http://localhost\\:10100'
+#host = 'http://localhost\\:10100'
+host = 'http://tag.psiinteractive.com'
 
 profileActions =
 	get: { method: 'JSONP', params: {jsonp: 'JSON_CALLBACK'} }
