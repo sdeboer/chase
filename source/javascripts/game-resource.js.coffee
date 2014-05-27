@@ -1,6 +1,3 @@
-#host = 'http://localhost\\:10100'
-host = 'http://tag.psiinteractive.com'
-
 gameActions =
 	get: { method: 'JSONP', params: {jsonp: 'JSON_CALLBACK'} }
 	save: { method: 'PATCH', withCredentials: true }
@@ -12,9 +9,9 @@ gameActions =
 			jsonp: 'JSON_CALLBACK'
 			mine: true
 
-Game = ($resource)->
+Game = ($resource, host)->
 	$resource host + '/game/:game_id',
 		null,
 		gameActions
 
-angular.module('ChaseApp').factory 'GameResource', ['$resource', Game]
+angular.module('ChaseApp').factory 'GameResource', ['$resource', 'TagUrl', Game]
