@@ -39,6 +39,7 @@ page "/templates/*", layout: false
 
 # Reload the browser automatically whenever files change
 activate :livereload
+activate :gzip
 config[:file_watcher_ignore] += [/\.swp$/, /\.un~$/, /\.git\//]
 
 # Methods defined in the helpers block are available in templates
@@ -71,4 +72,9 @@ configure :build do
 
   # Or use a different image path
   # set :http_path, "/Content/images/"
+end
+
+activate :s3_sync do |s3_sync|
+  s3_sync.bucket                     = 'chase.psiinteractive.com' # The name of the S3 bucket you are targetting. This is globally unique.
+  s3_sync.region                     = 'us-east-1'     # The AWS region for your bucket.
 end
