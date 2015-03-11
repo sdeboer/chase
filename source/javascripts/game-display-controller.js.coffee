@@ -31,6 +31,7 @@ class Controller
 			@$scope.supportsGeo = false
 
 	watchPosition: (position)=>
+		console.log "GD should have something", position
 		@socket.sendRequest
 			command: 'geo'
 			coords: position.coords

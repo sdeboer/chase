@@ -50,6 +50,7 @@ class SocketContainer
 		console.log "WS opened for " + @id
 
 	onMessage: (msg)=>
+		console.log "WS msg ", msg
 		data = JSON.parse msg.data
 		cid = data.callback_id
 
